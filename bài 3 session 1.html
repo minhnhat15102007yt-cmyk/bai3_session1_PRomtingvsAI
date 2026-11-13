@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bài 3 session 1</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h3 id="phần-1-giải-đáp-cho-hoàng--cơ-chế-cắt-từ-bpe">Phần 1: Giải đáp cho Hoàng &amp; Cơ chế cắt từ BPE</h3>
+<ul>
+<li>
+<p><strong>Không phải lỗi đếm trùng:</strong> AI không đếm theo “từ” (word) mà đếm theo các mảnh chữ nhỏ (<strong>sub-word</strong>) thông qua thuật toán <strong>Byte-Pair Encoding (BPE)</strong>.</p>
+<ul>
+<li><strong>Vì sao Tiếng Việt tốn gấp 2.4 lần Tiếng Anh?</strong></li>
+</ul>
+<ol>
+<li><strong>Thiên vị dữ liệu gốc:</strong> AI được huấn luyện chủ yếu bằng Tiếng Anh, nên trong “từ điển” của AI có sẵn nguyên vẹn hầu hết từ tiếng An</li>
+<li><strong>Bị “băm nhỏ” vì dấu thanh:</strong> Tiếng Việt chiếm tỷ lệ nhỏ trong dữ liệu học, lại có nhiều ký tự đặc biệt và dấu thanh (<em>ă, â, đ, sắc, huyền…</em>). Khi gặp từ tiếng Việt có dấu, thuật toán BPE không tìm thấy trong từ điển nên buộc phải <strong>cắt nhỏ một từ thành 2–4 mảnh byte/sub-word rời rạc</strong>  <span class="katex--inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.36687em; vertical-align: 0em;"></span><span class="mrel">→</span></span></span></span></span> Tổng token bị đội lên gấp 2.4 lần (285 vs 118).</li>
+</ol>
+<h3 id="phần-2-2-cách-viết-prompt-tiếng-việt-tiết-kiệm-30–40-token">Phần 2: 2 Cách viết Prompt Tiếng Việt tiết kiệm 30–40% Token</h3>
+</li>
+</ul>
+<p><strong>1. Xóa sạch từ đệm, viết kiểu “ra lệnh” (Telegraphic Style)</strong></p>
+<ul>
+<li><strong>Cách làm:</strong> Bỏ hết các từ rườm rà, lịch sự thừa thãi (<em>“Bạn hãy vui lòng…”, “giúp tôi”, “các loại”, “những”</em>). AI đủ thông minh để hiểu ngay từ khóa chính.
+<ul>
+<li><strong>Ví dụ:</strong> Thay vì viết <em>“Bạn hãy giúp tôi tóm tắt các ý chính của đoạn văn bản dưới đây”</em>, chỉ cần viết:  <em>“Tóm tắt ý chính văn bản sau:”</em>.<br>
+<strong>2. Chêm thuật ngữ Tiếng Anh cho các từ khóa hành động / định dạng</strong></li>
+</ul>
+</li>
+<li><strong>Cách làm:</strong> Dùng các từ tiếng Anh ngắn gọn thay cho cụm từ tiếng Việt dài dòng và nhiều dấu. Nhờ từ điển tiếng Anh sẵn có, 1 từ chỉ tốn đúng 1 token.
+<ul>
+<li><strong>Ví dụ:</strong> Thay vì <em>“Trích xuất thông tin tên khách hàng, số điện thoại và xuất ra định dạng bảng”</em>, viết gọn thành:  <em>“Extract [Tên, SĐT] -&gt; Output: Table”</em>.</li>
+</ul>
+</li>
+</ul>
+</div>
+</body>
+
+</html>
